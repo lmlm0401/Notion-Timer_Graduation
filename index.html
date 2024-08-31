@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>카운트다운</title>
+</head>
+<body>
+    <div id="countdown"></div>
+
+    <script>
+        function updateCountdown() {
+            const now = new Date();
+            const currentDay = now.getDay();
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
+            const currentSecond = now.getSeconds();
+
+            // 화요일 22:00을 목표 시간으로 설정
+            let targetDate = new Date(now);
+            targetDate.setHours(22, 0, 0, 0); // 22:00:00으로 설정
+
+            // 현재 요일이 화요일 이후이거나, 화요일 22:00이 지났다면 다음 주 화요일로 설정
+            if (currentDay > 2 || (currentDay === 2 && (currentHour > 22 || (currentHour === 22 && (currentMinute > 0 || currentSecond > 0))))) {
+                targetDate.setDate(now.getDate() + (9 - currentDay)); // 다음 주 화요일로 설정
+            } else if (currentDay < 2) {
+                targetDate.setDate(now.getDate() + (2 - currentDay)); // 이번 주 화요일로 설정
+            }
+
+            const timeDifference = targetDate - now;
+
+            const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+            const countdownDisplay = document.getElementById('countdown');
+            countdownDisplay.textContent = `${days}일 ${hours}시간 ${minutes}분 ${seconds}초`;
+
+            setTimeout(updateCountdown, 1000);
+
+            countdownDisplay.style.fontSize = '24px';
+            countdownDisplay.style.color = '#333';
+            countdownDisplay.style.fontFamily = 'Arial, sans-serif';
+            countdownDisplay.style.padding = "30px 0px 30px 30px";
+        }
+
+        window.onload = function() {
+            updateCountdown();
+        };
+    </script>
+</body>
+</html>
